@@ -15,12 +15,14 @@ void setup(){
   lastPipe=height-100;
   meter=loadImage("data/meter.png");
   meter.resize(20,height);
+  bird=loadImage("data/bird.png");
+  bird.resize(50,50);
   //pipes.add(new Pipe(600));
 }
 
-int birdY=50,ls,lastPipe=height-100,ativeThreshold=5000,gravity=5,nextbounce,score,highscore;
+int birdY=50,ls,lastPipe=height-100,ativeThreshold=5000,gravity=5,nextbounce,score,highscore,rotation;
 ArrayList<Pipe> pipes =new ArrayList<>();
-PImage meter;
+PImage meter,bird;
 
 void draw(){
   background(#4BB8FF);
@@ -30,7 +32,15 @@ void draw(){
   int size = int(map(volume, 0, 0.5, 1, 350)*1000);
   fill(255,255,0);
   
-  circle(100,height-birdY,50);
+  imageMode(CENTER);
+  translate(100,height-birdY);
+  rotate(radians(rotation));
+  image(bird,0,0);
+  rotate(-radians(rotation));
+  translate(-100,-(height-birdY));
+  
+  imageMode(CORNER);
+  
   for(int i=0;i<pipes.size();i++){
     pipes.get(i).move();
   }
@@ -51,10 +61,16 @@ void draw(){
   
   if(birdY>0){//gravity
     birdY-=gravity;
+    rotation+=2;
+    if(rotation>90)
+      rotation=90;
   }
   
   if(nextbounce<millis() && size>ativeThreshold){//the bird going up
     birdY+=12*gravity;
+    if(birdY>height)
+      birdY=height;
+    rotation=0;
     nextbounce=millis()+100;//time between bounces
   }
   
@@ -65,17 +81,19 @@ void draw(){
     rect(width-pipes.get(i).pos,pipes.get(i).height-150,30,-height);
   }
  
-  if(ls<millis()){
+  if(ls<millis()){//spawn new pipes
     ls=millis()+2000;
     pipes.add(new Pipe((int)random(max(lastPipe-150,100),min(lastPipe+150,height-100))));
     lastPipe=pipes.get(pipes.size()-1).height;
   }
 
 
-  float metermax=60000;
+  float metermax=60000;//volume meter
   float relvol=size/metermax;
   fill(255,255,160);
   clip(width-60,height-height*relvol,50,height);
+  if(height*relvol>height)
+    noClip();
   image(meter,width-30,0);
   image(meter,width-60,0);
   noClip();
