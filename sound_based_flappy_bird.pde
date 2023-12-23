@@ -20,7 +20,7 @@ void setup(){
   //pipes.add(new Pipe(600));
 }
 
-int birdY=50,ls,lastPipe=height-100,ativeThreshold=5000,gravity=5,nextbounce,score,highscore,rotation;
+int birdY=50,ls,lastPipe=height-100,ativeThreshold=8000,gravity=5,nextbounce,score,highscore,rotation;
 ArrayList<Pipe> pipes =new ArrayList<>();
 PImage meter,bird;
 
@@ -51,7 +51,7 @@ void draw(){
     if(pipes.get(0).pos>width-125){
       pipes.get(0).passed=true;
       //println(birdY-50+" "+(pipes.get(0).height-50) +" "+ (birdY+50) +" " + (pipes.get(0).height+150)+" "+pipes.get(0).height);
-      if(birdY-50>height-pipes.get(0).height-50 && birdY+50<height-pipes.get(0).height+150){//the bird made it through
+      if(birdY-25>height-pipes.get(0).height-50 && birdY+25<height-pipes.get(0).height+150){//the bird made it through
         score++;
       }else{
         score=0;
